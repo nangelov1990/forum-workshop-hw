@@ -1,0 +1,13 @@
+doctype
+html
+    head
+        title= "Workshop – Forum System"
+        link(href="/css/site.css" rel="stylesheet")
+    body
+        .container
+            ul.menu
+                li
+                    a(href="/") Home
+            if (globalError)
+                h3= globalError
+            block main-content
