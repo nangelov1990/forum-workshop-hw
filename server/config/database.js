@@ -12,5 +12,8 @@ module.exports = config => {
   })
   db.on('error', err => console.error(err))
 
-  // TODO: require models
+  require('../data/User').seedAdminUser()
+  require('../data/Category')
+  require('../data/Post')
+  require('../data/Answer')
 }

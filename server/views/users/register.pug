@@ -1,0 +1,21 @@
+extends ../shared/layout
+block main-content
+    h1= "Register user"
+    form(action="/users/create" method="post")
+        label(for="name") Name
+        br
+        input#name(type="text" name="name" value=name)
+        br
+        label(for="username") Username
+        br
+        input#username(type="text" name="username" value=username)
+        br
+        label(for="password") Password
+        br
+        input#password(type="password" name="password")
+        br
+        label(for="confirm-password") Confirm password
+        br
+        input#confirm-password(type="password" name="confirmPassword")
+        br
+        input(type="submit" value="Create")
