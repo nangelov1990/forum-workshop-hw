@@ -6,4 +6,18 @@ let categorySchema = mongoose.Schema({
   name: ({ type: String, required: requiredValidationMessage })
 })
 
-mongoose.model('Category', categorySchema)
+let Category = mongoose.model('Category', categorySchema)
+
+module.exports.seedCategories = () => {
+  Category
+    .find({})
+    .then(categories => {
+      if (categories.length > 0) return
+      let seedCategories = [
+        { name: 'Contemporary' },
+        { name: 'Commercial' }
+      ]
+      Category
+        .create(seedCategories)
+    })
+}

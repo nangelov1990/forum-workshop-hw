@@ -1,3 +1,37 @@
-//
-   Created by angelovn on 11/2/2016.
+extends ../shared/layout
+block heading
+    h1= user.username + "'s profile"
 
+block main-content
+    h3= "Name: " + user.name
+    if user.username != currentUser.username && currentUser.roles.indexOf('Admin') > -1
+        if user.banned
+            form(action="/admins/" + user.username + "/unban" method="post")
+                input(type="submit" value="Remove ban")
+        else
+            form(action="/admins/" + user.username + "/ban" method="post")
+                input(type="submit" value="Ban user")
+    ul.horizontal-list
+        li
+            ul
+                li
+                    h2= "Posts"
+                    ul.vertical-list
+                        each post in user.posts
+                            li
+                                a(href="/post/" + post._id + "/" + post.title)
+                                    div.title= post.title
+                                span= "Date: " + post.date
+                        else
+                            span= "No posts yet"
+                li.delimiter
+                li
+                    h2= "Answers"
+                    ul.vertical-list
+                        each answer in user.answers
+                            li
+                                a(href="/post/" + answer.postId + "/" + answer.postTitle)= answer.postTitle
+                                br
+                                span= answer.body
+                        else
+                            span= "No answers yet"

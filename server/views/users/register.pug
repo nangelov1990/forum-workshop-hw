@@ -1,6 +1,8 @@
 extends ../shared/layout
-block main-content
+block heading
     h1= "Register user"
+
+block main-content
     form(action="/users/create" method="post")
         label(for="name") Name
         br

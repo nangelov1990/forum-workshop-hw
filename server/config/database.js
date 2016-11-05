@@ -13,7 +13,7 @@ module.exports = config => {
   db.on('error', err => console.error(err))
 
   require('../data/User').seedAdminUser()
-  require('../data/Category')
+  require('../data/Category').seedCategories()
   require('../data/Post')
   require('../data/Answer')
 }

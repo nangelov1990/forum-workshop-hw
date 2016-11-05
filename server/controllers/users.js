@@ -16,6 +16,7 @@ module.exports = {
     } else {
       user.salt = encryption.generateSalt()
       user.hashedPass = encryption.generateHashedPass(user.salt, user.password)
+      user.banned = false
 
       User
         .create(user)
@@ -47,19 +48,16 @@ module.exports = {
           let correctPassword = false
           if (inputUser.password) {
             correctPassword = user.authenticate(inputUser.password)
-          } else {
-            res.render('users/login', { globalError: 'Please enter password'})
-            return
           }
 
           if (!correctPassword) {
-            res.render('users/login', { globalError: 'Invalid username or password'})
+            res.render('users/login', { globalError: 'Invalid username or password' })
           } else {
             req.logIn(user, (err, user) => {
               if (err) {
                 console.error(err)
                 res.status(500)
-                res.render('users/login', { globalError: 'Ooops, server error...'})
+                res.render('users/login', { globalError: 'Ooops, server error...' })
                 return
               }
 
@@ -67,25 +65,22 @@ module.exports = {
             })
           }
         } else {
-          res.render('users/login', { globalError: 'Invalid username or password'})
+          res.render('users/login', { globalError: 'Invalid username or password' })
         }
       })
   },
   display: (req, res) => {
-    if (req.locals.user) {
-      let user = req.locals.user
-      User
-        .findOne({ username: user.username })
-        .then(user => {
-          if (user) {
-            
-          }
-        })
-    } else {
-      res.redirect('/users/login')
-    }
+    let username = req.params.username
+    let currentUser = req.user
     User
-      .findOne({ username: req.locals.user.username })
+      .findOne({ username: username })
+      .populate('posts')
+      .populate('answers')
+      .then(user => {
+        if (user) {
+          res.render('users/display', { user, currentUser })
+        }
+      })
   },
   logout: (req, res) => {
     req.logout()

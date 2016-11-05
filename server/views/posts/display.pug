@@ -1,0 +1,68 @@
+extends ../shared/layout
+block heading
+    h1 Post details
+
+block main-content
+    div.title= post.title
+    span.content= post.content
+    br
+    span= "Category: " + post.category
+    span.delimiter
+    if currentUser && post.likes.indexOf(currentUser.username) > -1
+        if post.likes.length > 1
+            span= "You and " + (post.likes.length - 1) + " others like this."
+        else
+            span= "You like this."
+    else
+        span= "Likes: " + post.likes.length
+    span.delimiter
+    span= "Views: " + post.views
+    br
+    span= "Author: "
+        a(href="/profile/" + post.author)= post.author
+    span.delimiter
+    span= post.date
+    if currentUser && !currentUser.banned
+        if post.likes.indexOf(currentUser.username) > -1
+            form(method="post" action="/post/" + post._id + "/dislike")
+                input(type="submit" value="Dislike")
+        else
+            form(method="post" action="/post/" + post._id + "/like")
+                input(type="submit" value="Like")
+        if currentUser.username == post.author || currentUser.roles.indexOf("Admin") > -1
+            br
+            a(href="/post/" + post._id + "/edit")= "Edit"
+            form(action="/post/" + post._id + "/delete" method="post")
+                input(type="submit" value="Delete")
+        form(method="post" action="/post/" + post._id + "/" + post.title + "/answers/create")
+            textarea#body(name="body" placeholder="Please enter your comment here...")
+            br
+            input(type="submit" value="Add comment")
+    if currentUser
+        span= "Banned users: "
+        each user in post.bannedUsers
+            span= user + " "
+        else
+            span= "None."
+        if currentUser.roles.indexOf("Admin") > -1 && users.length > 0
+            br
+            form(method="post" action="/post/" + post._id + "/ban/" + ban-user)
+                label(for="banUser")= "Ban user "
+                select(name="banUser")#ban-user
+                    for user in users
+                        option(value=user.username)= user.username
+                input(type="submit" value="Ban user")
+    ul
+        h2 Answers
+        each answer in post.answers
+            li
+                span= answer.body
+                br
+                span= "Author: "
+                    a(href="/profile/" + answer.author)= answer.author
+                span.delimiter
+                span= answer.date
+                form(action="/post/" + post._id + "/" + post.title + "/answers/" + answer._id + "/delete")
+                    input(type="submit" value="Delete")
+        else
+            span= "No answers yet."

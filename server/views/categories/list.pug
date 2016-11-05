@@ -1,0 +1,18 @@
+extends ../shared/layout
+block heading
+    h1= "Post categories"
+
+block main-content
+    if currentUser.roles.indexOf("Admin") > -1
+        h2= "Add new category"
+        form(method="post" action="/categories/create")
+            label(for="name") Name
+            input#name(type="text" name="name" value=name)
+            br
+            input(type="submit" value="Create")
+    each category in categories
+        a(href="/list/" + category.name)
+            h3= category.name
+        if currentUser.roles.indexOf("Admin") > -1
+            form(method="post" action="/categories/" + category.name + "/delete")
+                input(type="submit" value="Delete")

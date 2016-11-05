@@ -11,7 +11,8 @@ let userSchema = mongoose.Schema({
   hashedPass: String,
   roles: [{ type: String, default: ['User'] }],
   posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
-  asnwers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }]
+  answers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
+  banned: Boolean
 })
 
 userSchema.method({
@@ -52,7 +53,8 @@ module.exports.seedAdminUser = () => {
           hashedPass: hashedPass,
           roles: ['Admin'],
           posts: Array.empty,
-          answers: Array.empty
+          answers: Array.empty,
+          banned: false
         })
     })
 }

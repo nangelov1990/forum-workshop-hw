@@ -1,8 +1,9 @@
 extends ../shared/layout
 block heading
-    h1= "Home"
+    h1 Posts
 
 block main-content
+    //ul
     div
         each post in posts
             div.post
@@ -13,3 +14,8 @@ block main-content
                 span= "Views: " + post.views
         else
             span= "No posts yet"
+    - let n = 1
+    while n <= Math.ceil(posts.count / 20)
+        a(href="/list?page=" + n)= n++
+        if n <= Math.ceil(posts.count / 20)
+            span= ", "

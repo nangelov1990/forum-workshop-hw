@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const passport = require('passport')
+const mongoosePaginate = require('mongoose-paginate')
 
 module.exports = (app, config) => {
   app.set('view engine', 'pug')
@@ -25,6 +26,11 @@ module.exports = (app, config) => {
     next()
   })
   app.use(express.static(config.rootPath + 'public'))
+
+  mongoosePaginate.paginate.options = {
+    lean:  true,
+    limit: 1
+  }
 
   console.log('Express running.')
 }

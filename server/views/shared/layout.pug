@@ -5,7 +5,8 @@ html
         link(href="/css/site.css" rel="stylesheet")
     body
         .container
-            ul.menu
+            block heading
+            ul.menu.horizontal-list
                 li
                     a(href="/") Home
                 li
@@ -16,6 +17,11 @@ html
                         a(href="/profile/" + currentUser.username)= currentUser.username
                     li
                         a(href="/add") Add post
+                    li
+                        a(href="/categories") Categories
+                    if currentUser.roles.indexOf("Admin") > -1
+                        li
+                            a(href="/admins/all") Admins
                     li
                         a(href="/users/logout") Log out
                 else

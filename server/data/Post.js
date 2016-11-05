@@ -1,16 +1,19 @@
 'use strict'
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate')
 const Schema = mongoose.Schema
 const requiredValidationMessage = '{PATH} is required'
 
 let postSchema = mongoose.Schema({
   title: ({ type: String, required: requiredValidationMessage }),
   content: ({ type: String, required: requiredValidationMessage }),
-  author: ({ type: String, ref: 'User', required: requiredValidationMessage  }),
-  categories: [{ type: String, ref: 'Category', required: requiredValidationMessage  }],
-  asnwers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
-  likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  views: Number
+  author: ({ type: String, ref: 'User', required: requiredValidationMessage }),
+  date: ({ type: Date, required: requiredValidationMessage }),
+  category: ({ type: String, ref: 'Category', required: requiredValidationMessage }),
+  answers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
+  likes: [{ type: String, ref: 'User' }],
+  views: Number,
+  bannedUsers: [{ type: String, ref: 'User' }]
 })
 
 postSchema.method({
@@ -39,5 +42,7 @@ postSchema.method({
     this.answers.remove(answerId)
   }
 })
+
+postSchema.plugin(mongoosePaginate)
 
 mongoose.model('Post', postSchema)
